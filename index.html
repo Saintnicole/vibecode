@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Haven | Escape Into Stories</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #800020;
+            --secondary: #98817B;
+            --background: #f9f6f5;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --text: #333333;
+            --accent-glow: rgba(128, 0, 32, 0.4);
+            --shadow: rgba(0, 0, 0, 0.1);
+            --toggle-bg: #e0d9d7;
+        }
+
+        .dark-theme {
+            --primary: #a8324c;
+            --secondary: #7a6a65;
+            --background: #1a0a0e;
+            --card-bg: rgba(40, 15, 23, 0.6);
+            --text: #f0e6e8;
+            --accent-glow: rgba(168, 50, 76, 0.6);
+            --shadow: rgba(0, 0, 0, 0.3);
+            --toggle-bg: #2d131b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.5s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .background-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.1;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .site-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--toggle-bg);
+            transition: 0.4s;
+            border-radius: 34px;
+            box-shadow: 0 0 5px var(--shadow);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--primary);
+            transition: 0.4s;
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--accent-glow);
+        }
+
+        input:checked + .slider {
+            background-color: var(--toggle-bg);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px var(--shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            animation: fadeInUp 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px var(--shadow), 0 0 20px var(--accent-glow);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .book-cover {
+            transform: scale(1.05);
+        }
+
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .book-author {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .book-description {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .book-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .buy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--secondary);
+            animation: fadeIn 1.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products {
+                grid-template-columns: 1fr;
+            }
+            
+            .site-title {
+                font-size: 2rem;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="site-title">Book Haven</h1>
+            <div class="theme-toggle">
+                <span class="toggle-label">Light</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Dark</span>
+            </div>
+        </header>
+        
+        <main>
+            <div class="products">
+                <div class="product-card" style="animation-delay: 0.1s">
+                    <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="The Silent Echo" class="book-cover">
+                    <h2 class="book-title">The Silent Echo</h2>
+                    <p class="book-author">by Elena Montgomery</p>
+                    <p class="book-description">A haunting tale of love and loss set against the backdrop of a remote Scottish island. When journalist Clara returns to her childhood home, she uncovers secrets that challenge everything she thought she knew about her family.</p>
+                    <div class="book-price">
+                        <span class="price">$24.99</span>
+                        <button class="buy-btn">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" style="animation-delay: 0.2s">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Chasing Shadows" class="book-cover">
+                    <h2 class="book-title">Chasing Shadows</h2>
+                    <p class="book-author">by Marcus Thorne</p>
+                    <p class="book-description">In a world where memories can be bought and sold, a detective with a haunted past must track down a shadowy organization that steals dreams. A mind-bending thriller that questions the nature of reality itself.</p>
+                    <div class="book-price">
+                        <span class="price">$22.99</span>
+                        <button class="buy-btn">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <div class="product-card" style="animation-delay: 0.3s">
+                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="The Last Ember" class="book-cover">
+                    <h2 class="book-title">The Last Ember</h2>
+                    <p class="book-author">by Sophia Chen</p>
+                    <p class="book-description">An epic fantasy adventure following a young mage who must restore magic to a dying world. With ancient prophecies and mythical creatures, this journey will test her courage and reshape the fate of kingdoms.</p>
+                    <div class="book-price">
+                        <span class="price">$26.99</span>
+                        <button class="buy-btn">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Escape into stories that stay with you.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-theme');
+            themeToggle.checked = true;
+        }
+        
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Create background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 20px and 80px
+                const size = Math.random() * 60 + 20;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation delay and duration
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Initialize particles on page load
+        window.addEventListener('load', createParticles);
+    </script>
+</body>
+</html>
